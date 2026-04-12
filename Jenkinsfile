@@ -1,17 +1,21 @@
 pipeline {
     agent any
-
     environment {
         DOCKER_IMAGE = "saiffulllah/framerate-store:latest"
     }
-
     stages {
         stage('Clone Repository') {
             steps {
                 checkout scm
             }
         }
-
+        stage('Prepare Environment') {
+            steps {
+                withCredentials([file(credentialsId: 'framerate-env', variable: 'ENV_FILE')]) {
+                    sh 'cp $ENV_FILE .env'
+                }
+            }
+        }
         stage('Build Docker Image') {
             steps {
                 script {
@@ -19,7 +23,6 @@ pipeline {
                 }
             }
         }
-
         stage('Run with Docker Compose') {
             steps {
                 script {
@@ -29,7 +32,6 @@ pipeline {
             }
         }
     }
-
     post {
         success {
             echo 'Build and deployment successful!'
