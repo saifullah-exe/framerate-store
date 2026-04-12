@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  web-jenkins:
+    image: node:24-alpine
+    container_name: framerate-store-jenkins-web
+    working_dir: /app
+    volumes:
+      - ./:/app
+    ports:
+      - "3001:3000"
+    env_file:
+      - .env
+    command: sh -c "npm ci && npm run build && node .next/standalone/server.js"
+    restart: unless-stopped
