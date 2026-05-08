@@ -2,14 +2,12 @@ version: '3.8'
 
 services:
   web-jenkins:
-    image: node:24-alpine
+    # THIS IS THE FIX: We use your custom built image containing the CSS/JS!
+    image: saiffulllah/framerate-store:latest
     container_name: framerate-store-jenkins-web
-    working_dir: /app
-    volumes:
-      - ./:/app
     ports:
+      # Expose on 3001 so it doesn't conflict with your live app on 3000
       - "3001:3000"
     env_file:
       - .env
-    command: sh -c "npm ci && npm run build && node .next/standalone/server.js"
     restart: unless-stopped
