@@ -11,6 +11,7 @@ export async function middleware(request: NextRequest) {
 
   if (isProtectedRoute && !token) {
     return NextResponse.redirect(new URL('/login', request.url));
+    
   }
 
   if (isAdminRoute) {
