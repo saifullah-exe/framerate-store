@@ -16,22 +16,27 @@ export const authConfig: NextAuthConfig = {
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
         
-        await dbConnect();
-        const user = await User.findOne({ email: credentials.email }).select("+password");
-        
-        if (!user || !user.password) return null;
-        
-        const isPasswordValid = await bcrypt.compare(credentials.password as string, user.password);
-        
-        if (!isPasswordValid) return null;
-        
-        return {
-          id: user._id.toString(),
-          email: user.email,
-          name: user.name,
-          role: user.role,
-          image: user.avatar
-        };
+        try {
+          await dbConnect();
+          const user = await User.findOne({ email: credentials.email }).select("+password");
+          
+          if (!user || !user.password) return null;
+          
+          const isPasswordValid = await bcrypt.compare(credentials.password as string, user.password);
+          
+          if (!isPasswordValid) return null;
+          
+          return {
+            id: user._id.toString(),
+            email: user.email,
+            name: user.name,
+            role: user.role,
+            image: user.avatar
+          };
+        } catch (error) {
+          console.error("Database connection or query failed in authorize:", error);
+          return null;
+        }
       }
     })
   ],

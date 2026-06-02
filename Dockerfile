@@ -10,6 +10,7 @@ RUN npm install sharp
 
 COPY . .
 
+ENV MONGODB_URI="mongodb://mongo-service:27017/framerate"
 RUN npm run build
 
 FROM node:24-alpine AS runner
