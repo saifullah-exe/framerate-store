@@ -16,7 +16,7 @@ if (!cached) {
 async function dbConnect(): Promise<typeof mongoose> {
   // Strictly rely on MONGODB_URI – works for both MongoDB Atlas URIs and raw
   // local/Kubernetes URIs like mongodb://mongo-service:27017/framerate
-  const MONGODB_URI = process.env.MONGODB_URI;
+  const MONGODB_URI = process.env.MONGODB_URI || process.env.MONGO_URI;
 
   if (!MONGODB_URI) {
     throw new Error(
