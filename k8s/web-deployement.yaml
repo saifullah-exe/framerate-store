@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: framerate-web
+  template:
+    metadata:
+      labels:
+        app: framerate-web
+    spec:
+      containers:
+      - name: framerate-web
+        image: saiffulllah/framerate-store:k8s
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 3000
+        env:
+        # Database
+        - name: MONGODB_URI
+          value: "mongodb://mongo-service:27017/framerate"
+        - name: MONGO_URI
+          value: "mongodb://mongo-service:27017/framerate"
+        # Auth (NextAuth v5 beta requirements)
+        - name: AUTH_SECRET
+          value: "a-random-super-secret-key-you-generate"
+        - name: NEXTAUTH_SECRET
+          value: "a-random-super-secret-key-you-generate"
+        - name: AUTH_URL
+          value: "http://127.0.0.1:8080"
+        - name: NEXTAUTH_URL
+          value: "http://127.0.0.1:8080"
+        - name: AUTH_TRUST_HOST
+          value: "true"
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
