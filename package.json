@@ -5,9 +5,10 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start -p 8080",
+    "start": "node scripts/seed.js && next start -p 8080",
     "lint": "next lint",
-    "seed": "npx tsx scripts/seed.ts"
+    "seed": "node scripts/seed.js",
+    "seed:ts": "npx tsx scripts/seed.ts"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
